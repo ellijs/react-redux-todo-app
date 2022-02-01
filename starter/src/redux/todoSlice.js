@@ -1,19 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 
-// Read
 export const getTodosAsync = createAsyncThunk(
 	'todos/getTodosAsync',
 	async () => {
 		const resp = await fetch('http://localhost:7000/todos');
 		if (resp.ok) {
 			const todos = await resp.json();
-			return { todos }; // This will be the paylod to our action   
+			return { todos };
 		}
 	}
 );
 
-// create
 export const addTodoAsync = createAsyncThunk(
 	'todos/addTodoAsync',
 	async (payload) => {
@@ -32,7 +30,6 @@ export const addTodoAsync = createAsyncThunk(
 	}
 );
 
-// Update
 export const toggleCompleteAsync = createAsyncThunk(
 	'todos/completeTodoAsync',
 	async (payload) => {
@@ -51,7 +48,6 @@ export const toggleCompleteAsync = createAsyncThunk(
 	}
 );
 
-// Delete
 export const deleteTodoAsync = createAsyncThunk(
 	'todos/deleteTodoAsync',
 	async (payload) => {
@@ -85,7 +81,7 @@ export const todoSlice = createSlice({
 			return state.filter((todo) => todo.id !== action.payload.id);
 		},
 	},
-	extraReducers: { // Change states
+	extraReducers: {
 		[getTodosAsync.fulfilled]: (state, action) => {
 			return action.payload.todos;
 		},
@@ -98,7 +94,7 @@ export const todoSlice = createSlice({
 			);
 			state[index].completed = action.payload.todo.completed;
 		},
-		[deleteTodoAsync.fulfilled]: (state, action) => {  // triggered
+		[deleteTodoAsync.fulfilled]: (state, action) => {
 			return state.filter((todo) => todo.id !== action.payload.id);
 		},
 	},
